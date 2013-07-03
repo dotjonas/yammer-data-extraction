@@ -1,0 +1,21 @@
+<div class="container">
+<div align="center">
+  <div class="alert alert-success">
+    <div>Successfully authenticated with Yammer ! Signed in as <strong><%= @full_name %></strong> </div>
+  </div>
+  <div class="hero-unit">
+
+  <h3>Network Names</h3>
+    <% @network_name.each do |network| %>
+        <p><%= network["name"] %></p>
+    <% end %>
+
+  <h3>Groups</h3>
+  <% @groups.each do |group| %>
+      <p><%= group["full_name"] %></p>
+  <% end %>
+  <p><a href="/yammer/app"><button class="btn btn-large btn-success">Extract Data</button></a></p>
+
+  </div>
+</div>
+ </div>

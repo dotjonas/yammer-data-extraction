@@ -1,0 +1,261 @@
+<div class="container">
+  <div class="alert alert-success">
+    <div align="center"><strong>Data extraction completed</strong></div>
+  </div>
+  <p><strong>Network Profiles </strong>(Table of profiles in the network)</p>
+  <div align="center">
+    <table class="table table-striped table-bordered" id="network_profiles">
+      <thead>
+      <tr>
+        <th>user_id</th>
+        <th>user_title</th>
+        <th>network_id</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @users.each do |user| %>
+          <tr>
+            <td><a href="<%= user['web_url'] %>" target="_blank"><%= user["id"] %></a></td>
+            <td><%= user["job_title"] %></td>
+            <td><%= user["network_id"] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>&nbsp;</div>
+  <!--<strong>Network Connections</strong>
+  <div align="center">
+    <table class="table table-striped table-bordered">
+      <thead>
+      <tr>
+        <th>source_id</th>
+        <th>target_id</th>
+        <th>follow_time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @users.each do |user| %>
+          <tr>
+            <td><%= user["id"] %></td>
+            <td><%= user["job_title"] %></td>
+            <td><%= user["created_at"] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>-->
+
+  <div>&nbsp;</div>
+  <p><Strong>Groups</strong> (Table of groups in the Network)</p>
+  <div align="center">
+    <table class="table table-striped table-bordered" id="groups">
+      <thead>
+      <tr>
+        <th>group_id</th>
+        <th>group_name</th>
+        <th>group_time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @groups.each do |group| %>
+          <tr>
+            <td><a href="<%= group['web_url'] %>" target="_blank"><%= group["id"] %></a></td>
+            <td><%= group["name"] %></td>
+            <td><%= group["created_at"] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>&nbsp;</div>
+
+  <div>&nbsp;</div>
+  <p><strong>Posts</strong> (Table of posts in each group in the network)</p>
+  <div align="center">
+    <table class="table table-striped table-bordered" id="posts">
+      <thead>
+      <tr>
+        <th>post_id</th>
+        <th>group_id</th>
+        <th>author_id</th>
+        <th>post_time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @posts["messages"].each do |post| %>
+          <% if post["replied_to_id"] == nil %>
+              <tr>
+                <td><a href="<%= post['web_url'] %>" target="_blank"><%= post["id"] %></a></td>
+                <% if post['group_id'].present? %>
+                <td><%= post["group_id"] %></td>
+                    <% else %>
+
+                    <td><%= post["network_id"] %></td>
+                    <% end %>
+
+                <td><%= post["sender_id"] %></td>
+                <td><%= post["created_at"] %></td>
+              </tr>
+          <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>&nbsp;</div>
+
+  <div>&nbsp;</div>
+  <p><strong>Conversations </strong>(Table of comments on post)</p>
+  <div align="center">
+    <table class="table table-striped table-bordered" id="conversations">
+      <thead>
+      <tr>
+        <th>comment_id</th>
+        <th>commenter_id</th>
+        <th>comment_body</th>
+        <th>post_id</th>
+        <th>comment_time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @posts["messages"].each do |post| %>
+          <% if post["group_id"] && post["replied_to_id"] %>
+              <tr>
+                <td><a href="<%= post['web_url'] %>" target="_blank"><%= post["id"] %></a></td>
+                <td><%= post["sender_id"] %></td>
+                <td class="comment_body"><%= post["body"]["plain"] %></td>
+                <td><%= post["replied_to_id"] %></td>
+                 <td><%= post["created_at"] %></td>
+              </tr>
+          <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>&nbsp;</div>
+
+  <div>&nbsp;</div>
+  <p><strong>Likes</strong> (Table of who likes who's posts or comments)</p>
+  <div align="center">
+    <table class="table table-striped table-bordered" id="likes">
+      <thead>
+      <tr>
+        <th>liker_id</th>
+        <th>liked_id</th>
+        <th>liked_content_id</th>
+        <th>liked_time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @posts["messages"].each do |post| %>
+          <% post["liked_by"]["names"].each do |user| %>
+              <% if user["user_id"] %>
+                  <tr>
+                    <td><%= user["user_id"] %></td>
+                    <td><%= post["sender_id"] %></td>
+                    <td><%= post["id"] %></td>
+                    <td><%= post["created_at"] %></td>
+                  </tr>
+              <% end %>
+          <% end %>
+      <% end %>
+      </tbody>
+    </table>
+
+  </div>
+  <div>&nbsp;</div>
+
+  <div>&nbsp;</div>
+</div>
+<script>
+    $(document).ready(function() {
+
+        $('#network_profiles').dataTable( {
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "aButtons": [ "copy", {
+
+                    "sExtends": "csv",
+                    "sTitle": "Data Extraction Tool - Network Profiles"
+                }, {
+                    "sExtends": "pdf",
+                    "sTitle": "Data Extraction Tool - Network Profiles",
+                    "sPdfMessage": "Table of profiles in the network"} ]
+            }
+        });
+        $('#groups').dataTable( {
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "aButtons": [ "copy", {
+
+                    "sExtends": "csv",
+                    "sTitle": "Data Extraction Tool - Groups"
+                }, {
+                    "sExtends": "pdf",
+                    "sTitle": "Data Extraction Tool - Groups",
+                    "sPdfMessage": "Table of groups in the Network"} ]
+            }
+        });
+        $('#posts').dataTable({
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "aButtons": [ "copy", {
+
+                    "sExtends": "csv",
+                    "sTitle": "Data Extraction Tool - Posts"
+                }, {
+                    "sExtends": "pdf",
+                    "sTitle": "Data Extraction Tool - Posts",
+                    "sPdfMessage": "Table of posts in each group in the network"} ]
+            }
+        });
+        $('#conversations').dataTable({
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "aButtons": [ "copy", {
+
+                    "sExtends": "csv",
+                    "sTitle": "Data Extraction Tool - Conversations"
+                }, {
+                    "sExtends": "pdf",
+                    "sTitle": "Data Extraction Tool - Conversations",
+                    "sPdfMessage": "Table of comments on post"} ]
+            }
+        });
+        $('#likes').dataTable({
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "aButtons": [ "copy", {
+
+                    "sExtends": "csv",
+                    "sTitle": "Data Extraction Tool - Likes"
+                }, {
+                    "sExtends": "pdf",
+                    "sTitle": "Data Extraction Tool - Network Profiles",
+                    "sPdfMessage": "Table of who likes who's posts or comments"} ]
+            }
+        });
+
+        trimStream("comment_body");
+
+
+        function trimStream(id) {
+             $('.' + id ).each(function () {
+                 var strip = 20;
+                var txt = $(this).text();
+                var element = txt.slice(0, strip);
+                var stripped = txt.slice(strip);
+                var len = txt.length;
+                if (len > strip) {
+                    $(this).html('<span>' + element + '<label style="display:none">' + stripped + '</label>... </span><a data-id="trim_stream" href="#" class="trims_readmore">more</a>');
+                    $(this).find('.trims_readmore').on('click', function (e) {
+                        e.preventDefault();
+                        $(this).closest("td").text(txt);
+
+                    })
+                }
+            })
+        }
+    })
+
+</script>
