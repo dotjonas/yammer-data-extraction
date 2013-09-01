@@ -3,17 +3,18 @@ require 'curb'
 
 class YammerController < ApplicationController
   def auth
-
-    @client_id = "YOUR_CLIENT_ID_HERE"
+#CLIENT_ID HERE!
+    @client_id = "gCKEes0ovKzofP9giKQ"
   end
 
   def success
     code = params[:code]
 
+#CLIENT_ID HERE!
+    client_id = "gCKEes0ovKzofP9giKQ"
 
-    client_id = "YOUR_CLIENT_ID_HERE"
-
-    client_secret = "YOUR_CLIENT_SECRET_HERE"
+#CLIENT_SECRET HERE!
+    client_secret = "zVuD1AecfbrJ5Ih9fyklaIIfHseCHE07luyA4KPXg"
 
     c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
 
