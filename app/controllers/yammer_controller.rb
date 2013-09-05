@@ -10,10 +10,10 @@ class YammerController < ApplicationController
   def success
     code = params[:code]
 
-#CLIENT_ID HERE!
+    #CLIENT_ID HERE!
     client_id = "gCKEes0ovKzofP9giKQ"
 
-#CLIENT_SECRET HERE!
+    #CLIENT_SECRET HERE!
     client_secret = "zVuD1AecfbrJ5Ih9fyklaIIfHseCHE07luyA4KPXg"
 
     c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
