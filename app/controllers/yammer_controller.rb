@@ -16,6 +16,9 @@ class YammerController < ApplicationController
     #CLIENT_SECRET HERE!
     client_secret = "zVuD1AecfbrJ5Ih9fyklaIIfHseCHE07luyA4KPXg"
 
+    #REDIRECT_URI HERE
+    redirect_uri = "http://ancient-island-1993.herokuapp.com/yammer/success/"
+
     c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
 
     token_string = JSON.parse(c.body_str)
