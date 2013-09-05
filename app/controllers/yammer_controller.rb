@@ -19,13 +19,13 @@ class YammerController < ApplicationController
     #REDIRECT_URI HERE
     redirect_uri = "http://ancient-island-1993.herokuapp.com/yammer/success/"
 
-    c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id=" @client_id "&client_secret=" client_secret "&code=" code)
+    c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
 
     token_string = JSON.parse(c.body_str)
 
     access_token = token_string["access_token"]["token"]
 
-    # Set to    
+    # Set to session
     session[:access_token] = access_token
 
     @full_name = token_string["user"]["full_name"]
