@@ -70,6 +70,14 @@ GEM
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       rack (~> 1.2)
+    omniauth (1.1.4)
+      hashie (>= 1.2, < 3)
+      rack
+    omniauth-oauth2 (1.1.1)
+      oauth2 (~> 0.8.0)
+      omniauth (~> 1.0)
+    omniauth-yammer (0.0.7)
+      omniauth-oauth2 (>= 1.1)
     pg (0.16.0)
     polyglot (0.3.3)
     rack (1.4.5)
@@ -134,7 +142,8 @@ DEPENDENCIES
   jquery-rails
   json (~> 1.7.6)
   multi_json
-  oauth2 (~> 0.8.0)
+  omniauth (~> 1.0)
+  omniauth-yammer
   pg
   rails (= 3.2.3)
   sass-rails (~> 3.2.3)

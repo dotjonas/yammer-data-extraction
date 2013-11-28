@@ -33,11 +33,15 @@ gem 'faraday_middleware', '~> 0.9.0'
 gem 'hashie', '~> 1.2.0'
 gem 'json', '~> 1.7.6'
 gem 'multi_json'
-gem 'oauth2', '~> 0.8.0'
+
+gem 'omniauth', '~> 1.0'
+gem 'omniauth-yammer'
 
 gem 'therubyracer'
 
 gem 'execjs'
+
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

@@ -17,20 +17,31 @@ class YammerController < ApplicationController
     client_secret = "zVuD1AecfbrJ5Ih9fyklaIIfHseCHE07luyA4KPXg"
 
     #REDIRECT_URI HERE
-    redirect_uri = "http://ancient-island-1993.herokuapp.com/yammer/success/"
+    redirect_uri = "http://ancient-island-1993.herokuapp.com/yammer/success/auth/yammer/callback"
 
-    c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
+    ##c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
 
-    token_string = JSON.parse(c.body_str)
+    ##token_string = JSON.parse(c.body_str)
 
-    access_token = token_string["access_token"]["token"]
+    ##access_token = token_string["access_token"]["token"]
 
     # Set to session
-    session[:access_token] = access_token
+    
+    rails generate controller sessions create
 
-    @full_name = token_string["user"]["full_name"]
+    def create
+     auth = request.env['omniauth.auth']
+     render :text => auth[:credentials][:token]
+    end
 
-    @id = token_string["user"]["id"]
+    ##session[:access_token] = access_token
+
+    ##@full_name = token_string["user"]["full_name"]
+
+    ##@id = token_string["user"]["id"]
+
+    # print out var values to see value
+    
 
     # Get network names
 

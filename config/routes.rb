@@ -5,6 +5,8 @@ DataExtractionTool::Application.routes.draw do
 
   get "yammer/auth"
 
+match '/auth/yammer/callback', :to => 'sessions#create'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
