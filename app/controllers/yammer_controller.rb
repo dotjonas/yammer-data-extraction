@@ -2,10 +2,12 @@ require 'yam'
 require 'curb'
 
 class YammerController < ApplicationController
+  
   def auth
 #CLIENT_ID HERE!
     @client_id = "gCKEes0ovKzofP9giKQ"
   end
+
 
   def success
     code = params[:code]
@@ -17,28 +19,28 @@ class YammerController < ApplicationController
     client_secret = "zVuD1AecfbrJ5Ih9fyklaIIfHseCHE07luyA4KPXg"
 
     #REDIRECT_URI HERE
-    redirect_uri = "http://ancient-island-1993.herokuapp.com/yammer/success/auth/yammer/callback"
+    redirect_uri = "https://ancient-island-1993.herokuapp.com/yammer/success/"
 
-    ##c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
+    c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
 
-    ##token_string = JSON.parse(c.body_str)
+    token_string = JSON.parse(c.body_str)
 
-    ##access_token = token_string["access_token"]["token"]
+    access_token = token_string["access_token"]["token"]
 
     # Set to session
     
-    rails generate controller sessions create
+    ##rails generate controller sessions create
 
     def create
      auth = request.env['omniauth.auth']
      render :text => auth[:credentials][:token]
     end
 
-    ##session[:access_token] = access_token
+    session[:access_token] = access_token
 
-    ##@full_name = token_string["user"]["full_name"]
+    @full_name = token_string["user"]["full_name"]
 
-    ##@id = token_string["user"]["id"]
+    @id = token_string["user"]["id"]
 
     # print out var values to see value
     
@@ -60,6 +62,7 @@ class YammerController < ApplicationController
 
     end
   end
+
 
   def app
     access_token = session[:access_token]
