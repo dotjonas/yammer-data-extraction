@@ -47,7 +47,7 @@ class YammerController < ApplicationController
 
     # Get network names
 
-    yammer_endpoint = 'https://www.yammer.com/api/v1/'
+    yammer_endpoint = 'hhttps://www.yammer.com/api/v1/networks/current.json'
     yam ||= Yam.new(access_token, yammer_endpoint)
     @network_name = yam.get('/networks/current')
 

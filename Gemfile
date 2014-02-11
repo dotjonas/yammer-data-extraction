@@ -42,6 +42,8 @@ gem 'therubyracer'
 
 gem 'execjs'
 
+gem 'unicorn'
+
 ruby "1.9.3" #Added according to Heroku intructions
 
 # To use ActiveModel has_secure_password
