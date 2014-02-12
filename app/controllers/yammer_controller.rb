@@ -1,13 +1,17 @@
-require 'yam'
+require 'yammer'
 require 'curb'
 
 class YammerController < ApplicationController
   
   def auth
-#CLIENT_ID HERE!
+    @redirect_uri = yammer_success_url
     @client_id = "gCKEes0ovKzofP9giKQ"
   end
 
+  def create
+   auth = request.env['omniauth.auth']
+   render :text => auth[:credentials][:token]
+  end
 
   def success
     code = params[:code]
@@ -19,57 +23,31 @@ class YammerController < ApplicationController
     client_secret = "zVuD1AecfbrJ5Ih9fyklaIIfHseCHE07luyA4KPXg"
 
     #REDIRECT_URI HERE
-    redirect_uri = "https://ancient-island-1993.herokuapp.com/yammer/success"
+    
 
     c = Curl::Easy.perform("https://www.yammer.com/oauth2/access_token.json?client_id="+ client_id +"&client_secret="+ client_secret +"&code=" + code)
 
     token_string = JSON.parse(c.body_str)
-
     access_token = token_string["access_token"]["token"]
 
     # Set to session
-    
-    ##rails generate controller sessions create
-
-    def create
-     auth = request.env['omniauth.auth']
-     render :text => auth[:credentials][:token]
-    end
-
     session[:access_token] = access_token
 
     @full_name = token_string["user"]["full_name"]
-
     @id = token_string["user"]["id"]
 
-    # print out var values to see value
-    
-
     # Get network names
+    yamr = Yammer::Client.new(access_token: access_token)
+    @network_name = yamr.get('networks/current.json')
+    @groups = yamr.get('/groups')
 
-    yammer_endpoint = 'hhttps://www.yammer.com/api/v1/networks/current.json'
-    yam ||= Yam.new(access_token, yammer_endpoint)
-    @network_name = yam.get('/networks/current')
-
-    if access_token
-      yammer_endpoint = 'https://www.yammer.com/api/v1/'
-      yam ||= Yam.new(access_token, yammer_endpoint)
-
-      @groups = yam.get('/groups')
-
-    else
-      raise "Ouch!"
-
-    end
   end
-
 
   def app
     access_token = session[:access_token]
 
     if access_token
-      yammer_endpoint = 'https://www.yammer.com/api/v1/'
-      yam ||= Yam.new(access_token, yammer_endpoint)
+      yam ||= Yammer::Client.new(:access_token => access_token)
 
       # Get all groups
       @groups = yam.get('/groups/')
@@ -121,7 +99,6 @@ class YammerController < ApplicationController
 
     else
       raise "Ouch!"
-
     end
   end
 end
